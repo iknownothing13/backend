@@ -7,7 +7,7 @@ const familyRoute = require('./routes/family');
 const homeRoute = require('./routes/home');
 const roomRoute = require('./routes/room');
 const nodeRoute = require('./routes/node');
-mongoose.connect('mongodb://localhost:27017/db', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb+srv://praneeth130204:praneeth130204@cluster1.rmcts.mongodb.net/', {useNewUrlParser: true, useUnifiedTopology: true});
 const db=mongoose.connection
 
 db.on('error',(err)=>{

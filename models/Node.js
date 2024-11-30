@@ -2,26 +2,36 @@ const mongoose      = require('mongoose');
 const Schema           = mongoose.Schema
 const roomSchema = new Schema({
     _id:{
-        type: String,
+        type: Number,
         required: true,
         unique: true,
         isPrimary: true
     },
-    activityArr:{
-        type: Array,
-        "default" : []
+    nodeValue:{
+        type: Number,
+        required: true
     },
-    predictionArr:{
-        type: Array,
-        "default" : [][10]
+    activityData:{
+        type : mongoose.Schema.Types.Mixed,
+        "default" : [],
+        required: true
     },
-    probabilityArr:{
-        type: Array,
-        "default" : [][10]
+    isDeleted:{
+        type: Boolean,
+        default: false,
     },
+    // predictionArr:{
+    //     type: Array,
+    //     "default" : [][10]
+    // },
+    // probabilityArr:{
+    //     type: Array,
+    //     "default" : [][10]
+    // },
     timestampArr:{
-        type: Array,
-        "default" : [][10]
+        type: [Date], // Assuming it's an array of timestamps
+        // required: true,
+        default: [],
     }
 },{timestamps: true})
 
