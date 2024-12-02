@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json()); // Parse JSON request bodies
 
-const port=process.env.PORT || 3000
+const port=process.env.PORT || 3500
 app.listen(port,()=>{
     console.log(`Server is running on PORT ${port}`)
 })
