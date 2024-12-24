@@ -14,4 +14,5 @@ router.post('/update', nodeController.update)
 router.post('/delete', nodeController.destroy)
 //always put the request with params at the end only
 router.post('/show', nodeController.show)
+router.post('/filter', nodeController.filterByTimestamp); // New filter route
 module.exports = router;

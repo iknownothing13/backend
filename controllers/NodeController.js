@@ -36,6 +36,41 @@ const show=(req,res,next)=>{
         })
 }
 
+const filterByTimestamp = (req, res, next) => {
+    console.log('Filtering by timestamps');
+
+    // Extract start and end timestamps, and node _id from the request body
+    const { start, end, _id } = req.body;
+
+    // Validate the required fields
+    if (!start || !end || !_id) {
+        return res.status(400).json({
+            message: 'start, end, and _id are required fields'
+        });
+    }
+
+    // Convert timestamps to Date objects
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    // Perform the query
+    Node.find({
+        _id: _id,
+        createdAt: { $gte: startDate, $lte: endDate } // Filter by the date range
+    })
+        .then(response => {
+            res.json({
+                data: response
+            });
+        })
+        .catch(err => {
+            res.json({
+                message: `An error occurred: ${err}`
+            });
+        });
+};
+
+
 //Add new Family
 // const store=(req,res,next)=>{
 //     console.log('Save started');
