@@ -194,5 +194,5 @@ const destroy = (req, res, next) => {
         });
 };
 module.exports = {
-    index, show, store, update, destroy
+    index, show, store, update, destroy, filterByTimestamp
 }
