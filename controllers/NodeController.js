@@ -37,38 +37,52 @@ const show=(req,res,next)=>{
 }
 
 const filterByTimestamp = (req, res, next) => {
-    console.log('Filtering by timestamps');
+    console.log('Filtering by timestamps and nodeValue');
 
-    // Extract start and end timestamps, and node _id from the request body
-    const { start, end, _id } = req.body;
+    const { start, end, nodeValue } = req.body; // Extract start, end, and nodeValue from the body
 
-    // Validate the required fields
-    if (!start || !end || !_id) {
+    // Validate required fields
+    if (!start || !end || !nodeValue) {
         return res.status(400).json({
-            message: 'start, end, and _id are required fields'
+            message: 'start, end, and nodeValue are required fields in the format dd/mm/yyyy hh:mm:ss'
         });
     }
 
-    // Convert timestamps to Date objects
-    const startDate = new Date(start);
-    const endDate = new Date(end);
+    // Helper function to parse `dd/mm/yyyy hh:mm:ss` into a Date object
+    const parseDateTime = (dateTimeString) => {
+        const [datePart, timePart] = dateTimeString.split(' ');
+        const [day, month, year] = datePart.split('/').map(Number);
+        const [hours, minutes, seconds] = timePart.split(':').map(Number);
+        return new Date(year, month - 1, day, hours, minutes, seconds); // Month is 0-indexed
+    };
 
-    // Perform the query
-    Node.find({
-        _id: _id,
-        createdAt: { $gte: startDate, $lte: endDate } // Filter by the date range
-    })
-        .then(response => {
-            res.json({
-                data: response
-            });
+    try {
+        // Parse the input dates
+        const startDate = parseDateTime(start);
+        const endDate = parseDateTime(end);
+
+        // Query to find all documents matching nodeValue and within the date range
+        Node.find({
+            nodeValue: nodeValue, // Match the nodeValue
+            createdAt: { $gte: startDate, $lte: endDate } // Filter by the createdAt range
         })
-        .catch(err => {
-            res.json({
-                message: `An error occurred: ${err}`
+            .then(response => {
+                res.json({
+                    data: response // Return all matching documents
+                });
+            })
+            .catch(err => {
+                res.status(500).json({
+                    message: `An error occurred: ${err}`
+                });
             });
+    } catch (err) {
+        res.status(400).json({
+            message: 'Invalid date format. Please use dd/mm/yyyy hh:mm:ss'
         });
+    }
 };
+
 
 
 //Add new Family
